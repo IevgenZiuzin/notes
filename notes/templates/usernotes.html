@@ -1,5 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% load static %}
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ search_form }}
+        </table>
+        <input type="submit" name="search" value="search">
+    </form>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ add_form }}
+        </table>
+        <input type="submit" name="save" value="save note">
+    </form>
+    {% if note_list %}
     <table>
         {% for note in  note_list %}
             <tr>
@@ -9,7 +25,14 @@
                 <td>
                     {{ note.created }}
                 </td>
+                <td>
+                    <button type="button" class="delete" note_id="{{ note.id }}">delete</button>
+                </td>
             </tr>
         {% endfor %}
     </table>
+    {% else %}
+        <p>Make your first note</p>
+    {% endif %}
+    <script src="{% static '/js/base.js' %}"></script>
 {% endblock %}

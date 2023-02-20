@@ -1,5 +1,15 @@
+<style>
+    .helptext, label{
+        display: none
+    }
+</style>
 {% extends 'base.html' %}
 {% block content %}
-    <p>{{ note.title }}</p>
-    <p>{{ note.text }}</p>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_p }}
+        </table>
+        <input type="submit" value="save">
+    </form>
 {% endblock %}

@@ -1,0 +1,7 @@
+<div class="search-results">
+    <ul>
+    {% for note in results %}
+        <li><a href="{% url 'note-detail' note.pk %}">{{ note }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
