@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <table>
+        {% for note in  note_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'note-detail' note.pk %}">{{ note.title }}</a>
+                </td>
+                <td>
+                    {{ note.created }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
