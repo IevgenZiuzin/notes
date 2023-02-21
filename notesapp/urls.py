@@ -20,7 +20,7 @@ from django.urls import path, re_path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path("", views.mynotes, name="index"),
+    path("", views.index, name="index"),
     re_path(r'^mynotes/$', views.mynotes, name='mynotes'),
     re_path(r'^note/(?P<pk>\d+)$', views.NoteDetail.as_view(), name='note-detail'),
     path("mynotes/api/search/", views.search, name="search"),

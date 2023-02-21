@@ -5,13 +5,12 @@ from datetime import datetime
 class NoteForm(forms.Form):
     title = forms.CharField(
         required=True,
-        label='Title',
         initial=datetime.now().strftime("%d-%m-%Y (%H:%M)"),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     text = forms.CharField(
         required=False,
-        label='Text',
-        widget=forms.Textarea(attrs={"rows": "5"})
+        widget=forms.Textarea(attrs={"rows": "5", 'class': 'form-control'})
     )
 
 

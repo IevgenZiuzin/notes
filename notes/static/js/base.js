@@ -5,8 +5,8 @@ window.onload = () =>{
             data = {
                 id: +button.getAttribute('note_id')
             }
-            parent = button.closest('tr')
-            await fetch("api/delete/", {
+            parent = button.closest('.notecard')
+            await fetch("/mynotes/api/delete/", {
                 method: 'DELETE',
                 headers: {
                     "X-Requested-With": "XMLHttpRequest",
@@ -22,7 +22,7 @@ window.onload = () =>{
                 .catch(data => console.log(response.statusText, `\nstatus: ${response.status}`))
         })
     })
-    let search_button = document.querySelector('input[name=search]')
+    let search_button = document.querySelector('.search')
     search_button.addEventListener('click', async evt => {
         evt.preventDefault()
         searchForm = search_button.closest('form')
@@ -31,7 +31,7 @@ window.onload = () =>{
             date_from: searchForm.querySelector('[name=date_from]').value,
             date_to: searchForm.querySelector('[name=date_to]').value
         }
-        await fetch("api/search/", {
+        await fetch("/mynotes/api/search/", {
             method: 'POST',
             headers: {
                 "X-Requested-With": "XMLHttpRequest",

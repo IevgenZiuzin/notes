@@ -23,6 +23,30 @@ class NoteDetail(generic.UpdateView):
 
 
 @login_required(login_url='/accounts/login/')
+def index(request):
+    note_list = Note.objects.filter(author=request.user).order_by('created')[:3]
+    search_form = SearchForm()
+    add_form = NoteForm()
+    data = {
+        'add_form': add_form,
+        'search_form': search_form,
+        'note_list': note_list
+    }
+    if request.method == 'POST':
+        try:
+            note = Note()
+            note.title = request.POST.get('title')
+            note.text = request.POST.get('text')
+            note.author = request.user
+            note.save()
+            return HttpResponseRedirect('/')
+        except Exception:
+            return HttpResponse('creation_failed')
+
+    return render(request, 'index.html', context=data)
+
+
+@login_required(login_url='/accounts/login/')
 def mynotes(request):
 
     add_form = NoteForm()

@@ -1,2 +1,19 @@
+<style>
+    div form.form-control{
+        border: none
+    }
+</style>
 {% extends 'base.html' %}
-{% block content %}{% endblock %}
+{% block searchform %}
+    <form method="POST" action="mynotes/api/search/">
+        {{ search_form }}
+        <button type="submit" class="search btn btn-light">Search</button>
+    </form>
+{% endblock %}
+{% block content %}
+    <form method="POST" class="form-control">
+        {% csrf_token %}
+            {{ add_form }}
+        <button type="submit" class="m-3 btn btn-primary">Save</button>
+    </form>
+{% endblock %}

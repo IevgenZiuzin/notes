@@ -1,38 +1,35 @@
+<style>
+    .notecard{
+        border-radius: 10px;
+        border: 1px solid transparent;
+    }
+    .notecard:hover{
+        border-color: black;
+    }
+</style>
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-    <form method="POST">
-        {% csrf_token %}
-        <table>
-            {{ search_form }}
-        </table>
-        <input type="submit" name="search" value="search">
-    </form>
-    <form method="POST">
-        {% csrf_token %}
-        <table>
-            {{ add_form }}
-        </table>
-        <input type="submit" name="save" value="save note">
-    </form>
     {% if note_list %}
-    <table>
-        {% for note in  note_list %}
-            <tr>
-                <td>
-                    <a href="{% url 'note-detail' note.pk %}">{{ note.title }}</a>
-                </td>
-                <td>
-                    {{ note.created }}
-                </td>
-                <td>
-                    <button type="button" class="delete" note_id="{{ note.id }}">delete</button>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+        <ul>
+            {% for note in  note_list %}
+                <li class="notecard d-flex justify-content-between m-1">
+                    <div class="align-self-center p-2 bd-highlight">
+                        <a href="{% url 'note-detail' note.pk %}" class="btn btn-hover-light rounded-2 d-flex align-items-center gap-3 py-2 px-3 lh-sm text-start">
+                            <div>
+                                <strong class="d-block">{{ note.title }}</strong>
+                                <small>{{ note.created }}</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="align-self-center p-2 bd-highlight">
+                        <button type="button" class="delete btn btn-outline-dark btn-sm" note_id="{{ note.id }}">&times;</button>
+                    </div>
+                </li>
+          {% endfor %}
+        </ul>
     {% else %}
-        <p>Make your first note</p>
+        <p><a href="{% url 'index' %}">Make your first note</a></p>
     {% endif %}
     <script src="{% static '/js/base.js' %}"></script>
 {% endblock %}
