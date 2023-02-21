@@ -1,7 +1,5 @@
 import json
-
-from django.core import serializers
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views import generic
@@ -26,6 +24,7 @@ class NoteDetail(generic.UpdateView):
 
 @login_required(login_url='/accounts/login/')
 def mynotes(request):
+
     add_form = NoteForm()
     search_form = SearchForm()
     note_list = Note.objects.filter(author=request.user).order_by('created')
@@ -36,24 +35,37 @@ def mynotes(request):
         'note_list': note_list
     }
 
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    if is_ajax:
-        if request.method == 'POST':
-            pass
-            # search_data = json.load(request)
-            # results = search_validator(note_list, search_data)
-            # print(render_to_string('search_results.html', {'results': results}))
-            # html = render_to_string('search_results.html', {'results': results})
-            # return HttpResponse(html)
-        if request.method == 'DELETE':
-            note_id = json.load(request)['id']
-            note = note_list.get(id=note_id)
-            note.delete()
     if request.method == 'POST':
-        note = Note()
-        note.title = request.POST.get('title')
-        note.text = request.POST.get('text')
-        note.author = request.user
-        note.save()
-        return HttpResponseRedirect('/mynotes')
+        try:
+            note = Note()
+            note.title = request.POST.get('title')
+            note.text = request.POST.get('text')
+            note.author = request.user
+            note.save()
+            return HttpResponseRedirect('/mynotes')
+        except Exception:
+            return HttpResponse('creation_failed')
+
     return render(request, 'usernotes.html', context=data)
+
+
+def search(request):
+    try:
+        note_list = Note.objects.filter(author=request.user).order_by('created')
+        search_data = json.load(request)
+        results = search_validator(note_list, search_data)
+        html = render_to_string('search_results.html', {'results': results})
+        return HttpResponse(html)
+    except Exception:
+        return HttpResponse(status=500)
+
+
+def delete(request):
+    try:
+        note_list = Note.objects.filter(author=request.user).order_by('created')
+        note_id = json.load(request)['id']
+        note = note_list.get(id=note_id)
+        note.delete()
+        return HttpResponse(status=200)
+    except Exception:
+        return HttpResponse(status=500)

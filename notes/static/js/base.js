@@ -1,17 +1,29 @@
 window.onload = () =>{
     let delete_buttons = document.querySelectorAll('.delete')
     delete_buttons.forEach( button =>{
-        button.addEventListener('click', evt => {
+        button.addEventListener('click', async evt => {
             data = {
                 id: +button.getAttribute('note_id')
             }
             parent = button.closest('tr')
-            request('DELETE', '/', data)
-            parent.remove()
+            await fetch("api/delete/", {
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        parent.remove()
+                    }
+                })
+                .catch(data => console.log(response.statusText, `\nstatus: ${response.status}`))
         })
     })
     let search_button = document.querySelector('input[name=search]')
-    search_button.addEventListener('click', evt =>{
+    search_button.addEventListener('click', async evt => {
         evt.preventDefault()
         searchForm = search_button.closest('form')
         data = {
@@ -19,18 +31,23 @@ window.onload = () =>{
             date_from: searchForm.querySelector('[name=date_from]').value,
             date_to: searchForm.querySelector('[name=date_to]').value
         }
-        request('POST', '/', data)
-    })
-}
-
-async function request(method, path, data) {
-    await fetch(path, {
-        method: method,
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify(data)
+        await fetch("api/search/", {
+            method: 'POST',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if(response.ok){
+                    return response.text()
+                }
+                else{
+                    console.log(response.statusText, `\nstatus: ${response.status}`)
+                }
+            })
+            .then(data => console.log(data))
     })
 }
 

@@ -22,5 +22,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path("", views.mynotes, name="index"),
     re_path(r'^mynotes/$', views.mynotes, name='mynotes'),
-    re_path(r'^note/(?P<pk>\d+)$', views.NoteDetail.as_view(), name='note-detail')
+    re_path(r'^note/(?P<pk>\d+)$', views.NoteDetail.as_view(), name='note-detail'),
+    path("mynotes/api/search/", views.search, name="search"),
+    path("mynotes/api/delete/", views.delete, name="delete")
 ]

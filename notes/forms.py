@@ -19,10 +19,12 @@ class SearchForm(forms.Form):
     search_match = forms.CharField(
         label='Search match',
         required=False,
+        initial='asdf'
     )
     date_from = forms.DateField(
         label='from',
         required=False,
+        initial='2023-02-13',
         widget=forms.DateInput(
             attrs={
                 'type': 'date'
