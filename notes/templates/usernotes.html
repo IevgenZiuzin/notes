@@ -1,35 +1,22 @@
-<style>
-    .notecard{
-        border-radius: 10px;
-        border: 1px solid transparent;
-    }
-    .notecard:hover{
-        border-color: black;
-    }
-</style>
 {% extends 'base.html' %}
 {% block content %}
-    {% load static %}
     {% if note_list %}
         <ul>
             {% for note in  note_list %}
-                <li class="notecard d-flex justify-content-between m-1">
-                    <div class="align-self-center p-2 bd-highlight">
-                        <a href="{% url 'note-detail' note.pk %}" class="btn btn-hover-light rounded-2 d-flex align-items-center gap-3 py-2 px-3 lh-sm text-start">
-                            <div>
+                <li class="notecard rounded-3">
+                        <a href="{% url 'note-detail' note.pk %}" class="dropdown-item rounded-3 d-flex justify-content-between">
+                            <div class="align-self-center p-2">
                                 <strong class="d-block">{{ note.title }}</strong>
                                 <small>{{ note.created }}</small>
                             </div>
+                            <div class="align-self-center p-2">
+                                <button type="button" class="delete btn btn-outline-dark btn-sm" note_id="{{ note.id }}">&times;</button>
+                            </div>
                         </a>
-                    </div>
-                    <div class="align-self-center p-2 bd-highlight">
-                        <button type="button" class="delete btn btn-outline-dark btn-sm" note_id="{{ note.id }}">&times;</button>
-                    </div>
                 </li>
           {% endfor %}
         </ul>
     {% else %}
         <p><a href="{% url 'index' %}">Make your first note</a></p>
     {% endif %}
-    <script src="{% static '/js/base.js' %}"></script>
 {% endblock %}

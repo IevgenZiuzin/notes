@@ -9,19 +9,26 @@ class Note(models.Model):
         blank=True,
         null=True,
         default='title',
+        help_text='Note title',
+        verbose_name='Note title'
     )
     text = models.TextField(
         blank=True,
         null=True,
+        help_text='Note text',
+        verbose_name='Note text'
     )
     created = models.DateField(
-        auto_now_add=True
+        auto_now_add=True,
+        help_text='Note created',
+        verbose_name='Note created'
     )
     author = models.ForeignKey(
         User,
         default=1,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        help_text='Note author',
+        verbose_name='Note author'
     )
 
     def __str__(self):

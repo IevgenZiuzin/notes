@@ -1,16 +1,10 @@
-<div class="search-results dropdown-menu position-static d-flex align-items-stretch p-3 rounded-3 shadow-lg w-600px">
-  <nav class="d-grid gap-2 col-8">
-      <ul>
-          {% for note in results %}
-              <li>
-                <a href="{% url 'note-detail' note.pk %}" class="btn btn-hover-light rounded-2 d-flex align-items-center gap-3 py-2 px-3 lh-sm text-start">
-                    <div>
-                        <strong class="d-block">{{ note.title }}</strong>
-                        <small>{{ note.created }}</small>
-                    </div>
-                </a>
-              </li>
-          {% endfor %}
-      </ul>
-  </nav>
-</div>
+<ul class="search-results dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow">
+    {% for note in results %}
+        <li>
+            <a class="dropdown-item rounded-3" href="{% url 'note-detail' note.pk %}">
+                <strong class="d-block">{{ note.title }}</strong>
+                <small>{{ note.created }}</small>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

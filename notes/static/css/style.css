@@ -1,0 +1,18 @@
+ul{
+    list-style-type: none;
+}
+.search-form{
+    position: relative;
+}
+.search-results{
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    overflow: auto;
+}
+.notecard{
+    border: 1px solid transparent;
+}
+.notecard:hover{
+    border-color: black;
+}

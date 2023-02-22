@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -14,8 +15,8 @@ from .validators import *
 
 class NoteDetail(generic.UpdateView):
     model = Note
-    fields = ['title', 'text']
     template_name = 'note.html'
+    form_class = NoteForm
 
     def get_success_url(self):
         view_name = 'mynotes'
@@ -24,13 +25,11 @@ class NoteDetail(generic.UpdateView):
 
 @login_required(login_url='/accounts/login/')
 def index(request):
-    note_list = Note.objects.filter(author=request.user).order_by('created')[:3]
-    search_form = SearchForm()
-    add_form = NoteForm()
+    last_notes = Note.objects.filter(author=request.user).order_by('-created')[:3]
+    add_form = NoteForm(initial={'title': datetime.now().strftime("%d-%B-%Y (%H:%M)")})
     data = {
         'add_form': add_form,
-        'search_form': search_form,
-        'note_list': note_list
+        'last_notes': last_notes
     }
     if request.method == 'POST':
         try:
@@ -41,7 +40,7 @@ def index(request):
             note.save()
             return HttpResponseRedirect('/')
         except Exception:
-            return HttpResponse('creation_failed')
+            return HttpResponse(status=500)
 
     return render(request, 'index.html', context=data)
 
@@ -49,13 +48,9 @@ def index(request):
 @login_required(login_url='/accounts/login/')
 def mynotes(request):
 
-    add_form = NoteForm()
-    search_form = SearchForm()
-    note_list = Note.objects.filter(author=request.user).order_by('created')
+    note_list = Note.objects.filter(author=request.user).order_by('-created')
 
     data = {
-        'search_form': search_form,
-        'add_form': add_form,
         'note_list': note_list
     }
 
