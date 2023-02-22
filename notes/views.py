@@ -10,8 +10,6 @@ from .models import *
 from .forms import *
 from .validators import *
 
-# XAePpQkZOM
-
 
 class NoteDetail(generic.UpdateView):
     model = Note
@@ -47,24 +45,10 @@ def index(request):
 
 @login_required(login_url='/accounts/login/')
 def mynotes(request):
-
     note_list = Note.objects.filter(author=request.user).order_by('-created')
-
     data = {
         'note_list': note_list
     }
-
-    if request.method == 'POST':
-        try:
-            note = Note()
-            note.title = request.POST.get('title')
-            note.text = request.POST.get('text')
-            note.author = request.user
-            note.save()
-            return HttpResponseRedirect('/mynotes')
-        except Exception:
-            return HttpResponse('creation_failed')
-
     return render(request, 'usernotes.html', context=data)
 
 
