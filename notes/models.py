@@ -18,7 +18,7 @@ class Note(models.Model):
         help_text='Note text',
         verbose_name='Note text'
     )
-    created = models.DateField(
+    created = models.DateTimeField(
         auto_now_add=True,
         help_text='Note created',
         verbose_name='Note created'

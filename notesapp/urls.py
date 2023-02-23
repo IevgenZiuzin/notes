@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from notes import views
-from django.urls import path, re_path, include
+from django.urls import path, re_path
+from notes.forms import SignInForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('signup/', views.sign_up, name="signup"),
+    path('signin/', views.sign_in, name='signin'),
+    path('signout/', views.sign_out, name='signout'),
     path("", views.index, name="index"),
     re_path(r'^mynotes/$', views.mynotes, name='mynotes'),
     re_path(r'^note/(?P<pk>\d+)$', views.NoteDetail.as_view(), name='note-detail'),

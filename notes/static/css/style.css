@@ -1,6 +1,9 @@
 ul{
     list-style-type: none;
 }
+ul.errorlist{
+    display: none
+}
 .search-form{
     position: relative;
 }
@@ -15,4 +18,7 @@ ul{
 }
 .notecard:hover{
     border-color: black;
+}
+.notetitle{
+    white-space: pre-line;
 }

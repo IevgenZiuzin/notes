@@ -1,7 +1,10 @@
 import json
 from datetime import datetime
+
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -17,11 +20,56 @@ class NoteDetail(generic.UpdateView):
     form_class = NoteForm
 
     def get_success_url(self):
-        view_name = 'mynotes'
-        return reverse(view_name)
+        return reverse('mynotes')
 
 
-@login_required(login_url='/accounts/login/')
+def sign_up(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    if request.method == 'POST':
+        signup_form = SignUpForm(request.POST)
+        if signup_form.is_valid():
+            user = User.objects.create_user(
+                username=request.POST.get('username'),
+                password=request.POST.get('password1'),
+                # first_name=request.POST.get('first_name'),
+                # last_name=request.POST.get('last_name'),
+            )
+            user.save()
+            login(request, user)
+            return redirect(reverse('index'))
+    else:
+        signup_form = SignUpForm()
+    return render(request, 'registration/signup.html', context={'form': signup_form})
+
+
+def sign_in(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    if request.method == 'POST':
+        signin_form = SignInForm(request.POST)
+        if signin_form.is_valid():
+            user = authenticate(
+                username=signin_form.cleaned_data['username'],
+                password=signin_form.cleaned_data['password'],
+            )
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                messages.error(request, 'Wrong username or password')
+                return redirect('signin')
+    else:
+        signin_form = SignInForm()
+    return render(request, 'registration/signin.html', context={'form': signin_form})
+
+
+def sign_out(request):
+    logout(request)
+    return redirect(reverse('signin'))
+
+
+@login_required(login_url='signin/')
 def index(request):
     last_notes = Note.objects.filter(author=request.user).order_by('-created')[:3]
     add_form = NoteForm(initial={'title': datetime.now().strftime("%d-%B-%Y (%H:%M)")})

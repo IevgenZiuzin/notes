@@ -2,7 +2,7 @@
     {% for note in results %}
         <li>
             <a class="dropdown-item rounded-3" href="{% url 'note-detail' note.pk %}">
-                <strong class="d-block">{{ note.title }}</strong>
+                <strong class="notetitle d-block">{{ note.title }}</strong>
                 <small>{{ note.created }}</small>
             </a>
         </li>

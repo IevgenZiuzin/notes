@@ -5,8 +5,8 @@
             {% for note in  note_list %}
                 <li class="notecard rounded-3">
                         <a href="{% url 'note-detail' note.pk %}" class="dropdown-item rounded-3 d-flex justify-content-between">
-                            <div class="align-self-center p-2">
-                                <strong class="d-block">{{ note.title }}</strong>
+                            <div class="align-self-center p-2 ">
+                                <strong class="notetitle d-block">{{ note.title }}</strong>
                                 <small>{{ note.created }}</small>
                             </div>
                             <div class="align-self-center p-2">

@@ -12,7 +12,7 @@
     {% for note in last_notes %}
         <li>
             <a class="dropdown-item rounded-3 shadow-sm border border-secondary mb-2 p-2" href="{% url 'note-detail' note.pk %}">
-                <strong class="d-block">{{ note.title }}</strong>
+                <strong class="notetitle d-block">{{ note.title }}</strong>
                 <small>{{ note.created }}</small>
             </a>
         </li>
